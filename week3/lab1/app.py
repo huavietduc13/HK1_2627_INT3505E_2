@@ -2,15 +2,13 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Giả lập database trong bộ nhớ
 posts = [
     {"id": 1, "title": "title1", "content": "conten1", "author_id": 101, "tags": ["tech", "api"]},
     {"id": 2, "title": "title2", "content": "content2", "author_id": 102, "tags": ["python", "flask"]}
 ]
 
-@app.route("/api/v1/posts", methods=["GET"])
+@app.route("/posts", methods=["GET"])
 def get_posts():
-    """Lấy danh sách bài viết kèm lọc theo tag hoặc author_id"""
     tag = request.args.get("tag")
     author_id = request.args.get("author_id", type=int)
 
@@ -23,7 +21,7 @@ def get_posts():
     return jsonify(filtered_posts), 200
 
 
-@app.route("/api/v1/posts", methods=["POST"])
+@app.route("posts", methods=["POST"])
 def create_post():
     data = request.get_json()
     if not data or "title" not in data or "content" not in data:
@@ -40,7 +38,7 @@ def create_post():
     return jsonify(new_post), 201
 
 
-@app.route("/api/v1/posts/<int:id>", methods=["GET"])
+@app.route("/posts/<int:id>", methods=["GET"])
 def get_post_detail(id):
     post = next((p for p in posts if p["id"] == id), None)
     if not post:
@@ -48,7 +46,7 @@ def get_post_detail(id):
     return jsonify(post), 200
 
 
-@app.route("/api/v1/posts/<int:id>", methods=["PATCH"])
+@app.route("/posts/<int:id>", methods=["PATCH"])
 def update_post(id):
     post = next((p for p in posts if p["id"] == id), None)
     if not post:
@@ -63,7 +61,7 @@ def update_post(id):
     return jsonify(post), 200
 
 
-@app.route("/api/v1/posts/<int:id>", methods=["DELETE"])
+@app.route("/posts/<int:id>", methods=["DELETE"])
 def delete_post(id):
     global posts
     posts = [p for p in posts if p["id"] != id]
