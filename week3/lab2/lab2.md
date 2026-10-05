@@ -7,7 +7,7 @@
 - **400 Bad Request**.
 - **422 Unprocessable Content**.
 
-![Test 1 - Bad Request & Validation](test.png)
+![Test 1 - Bad Request & Validation](test1.png)
 
 ### Test 2: Các lỗi Not Found (404) & Method Not Allowed (405)
 
