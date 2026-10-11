@@ -1,0 +1,101 @@
+openapi: 3.0.3
+info:
+  title: Pet Store
+  version: 1.0.0
+paths:
+  /pets:
+    get:
+      operationId: listPets
+      tags: [pets]
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Pets'}
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: createPets
+      tags: [pets]
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema: {$ref: '#/components/schemas/Pet'}
+      responses:
+        '201':
+          description: Pet created
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /pets/{petId}:
+    parameters:
+      - name: petId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: showPetById
+      tags: [pets]
+      responses:
+        '200':
+          description: List pets
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Pet'}
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: deletePet
+      tags: [pets]
+      responses:
+        '204':
+          description: Pet deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Pet:
+      required: [id, name]
+      properties: {id: {type: integer}, name: {type: string},
+        tag: {type: string}}
+    Pets:
+      type: array
+      items:
+        $ref: '#/components/schemas/Pet'
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  
