@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "BookCreate",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+        },
+        "isbn": {
+            "type": "string",
+            "pattern": "^[0-9]{13}$"
+        },
+        "price_vnd": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "stock": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "category_id": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "author_ids": {
+            "type": "array",
+            "items": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "uniqueItems": true
+        }
+    },
+    "required": [
+        "title",
+        "isbn",
+        "price_vnd",
+        "category_id"
+    ],
+    "additionalProperties": false
+}

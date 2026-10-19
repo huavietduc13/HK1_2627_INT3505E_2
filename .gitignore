@@ -3,3 +3,4 @@
 __pycache__/
 .db/
 week2/hw/hw01+03/shop.db
+venv/
