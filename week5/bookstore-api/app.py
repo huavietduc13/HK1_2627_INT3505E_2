@@ -1,5 +1,8 @@
-from flask import Flask, jsonify
-from models import db, Book
+from flask import Flask
+from models import db
+from routes.authors import authors_bp
+from routes.books import books_bp
+from routes.categories import categories_bp
 
 app = Flask(__name__)
 
@@ -8,15 +11,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
+app.register_blueprint(books_bp)
+app.register_blueprint(authors_bp)
+app.register_blueprint(categories_bp)
+
 with app.app_context():
     db.create_all()
 
 
-@app.get("/api/v1/books")
-def list_books():
-    books = Book.query.order_by(Book.id).all()
-    return jsonify([book.to_dict() for book in books]), 200
-
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)
