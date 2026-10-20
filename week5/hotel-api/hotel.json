@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Hotel",
+    "type": "object",
+    "required": [
+        "id",
+        "name",
+        "address",
+        "city",
+        "starRating"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^hotel_[a-z0-9]+$"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 200
+        },
+        "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "address": {
+            "type": "string",
+            "minLength": 5
+        },
+        "city": {
+            "type": "string"
+        },
+        "starRating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}

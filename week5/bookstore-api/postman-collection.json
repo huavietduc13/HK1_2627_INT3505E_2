@@ -1,0 +1,320 @@
+{
+    "info": {
+        "name": "Bookstore API - Lab 1",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000"
+        },
+        {
+            "key": "category_id",
+            "value": "1"
+        },
+        {
+            "key": "author_id",
+            "value": "1"
+        },
+        {
+            "key": "genre",
+            "value": "fiction"
+        },
+        {
+            "key": "book_id",
+            "value": "1"
+        },
+        {
+            "key": "next_cursor",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Tạo category",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const body = pm.response.json();",
+                                    "  pm.collectionVariables.set('category_id', String(body.id));",
+                                    "  pm.collectionVariables.set('genre', body.slug);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Postman Test\",\n  \"slug\": \"postman-test\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/categories"
+                    }
+                },
+                {
+                    "name": "Liệt kê categories",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/categories"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Authors",
+            "item": [
+                {
+                    "name": "Tạo author",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const body = pm.response.json();",
+                                    "  pm.collectionVariables.set('author_id', String(body.id));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Postman Test Author\",\n  \"bio\": \"Author for API testing\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/authors"
+                    }
+                },
+                {
+                    "name": "Liệt kê authors",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/authors"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Books",
+            "item": [
+                {
+                    "name": "Tạo book A",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  const body = pm.response.json();",
+                                    "  pm.collectionVariables.set('book_id', body.id.replace('book_', ''));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Alpha API\",\n  \"isbn\": \"9780000000001\",\n  \"price_vnd\": 250000,\n  \"stock\": 10,\n  \"category_id\": {{category_id}},\n  \"author_ids\": [{{author_id}}]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/books"
+                    }
+                },
+                {
+                    "name": "Tạo book B",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Zeta Python\",\n  \"isbn\": \"9780000000002\",\n  \"price_vnd\": 250000,\n  \"stock\": 5,\n  \"category_id\": {{category_id}},\n  \"author_ids\": [{{author_id}}]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/books"
+                    }
+                },
+                {
+                    "name": "Tạo book C",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Cursor Design\",\n  \"isbn\": \"9780000000003\",\n  \"price_vnd\": 150000,\n  \"stock\": 8,\n  \"category_id\": {{category_id}},\n  \"author_ids\": [{{author_id}}]\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/books"
+                    }
+                },
+                {
+                    "name": "List books - offset",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=offset&offset=0&limit=2"
+                    }
+                },
+                {
+                    "name": "List books - genre và multi-key sort",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=offset&offset=0&limit=20&genre={{genre}}&sort=-price_vnd,title"
+                    }
+                },
+                {
+                    "name": "List books - cursor trang đầu",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const body = pm.response.json();",
+                                    "if (body.pagination && body.pagination.next_cursor) {",
+                                    "  pm.collectionVariables.set('next_cursor', body.pagination.next_cursor);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=cursor&limit=2&genre={{genre}}&sort=-price_vnd,title"
+                    }
+                },
+                {
+                    "name": "List books - cursor trang tiếp",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=cursor&limit=2&genre={{genre}}&sort=-price_vnd,title&cursor={{next_cursor}}"
+                    }
+                },
+                {
+                    "name": "Lấy book theo ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books/{{book_id}}"
+                    }
+                },
+                {
+                    "name": "Cập nhật book - PATCH",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"price_vnd\": 300000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": "{{base_url}}/api/v1/books/{{book_id}}"
+                    }
+                },
+                {
+                    "name": "Xóa book",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{base_url}}/api/v1/books/{{book_id}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Validation errors",
+            "item": [
+                {
+                    "name": "Strategy không hợp lệ - dự kiến 400",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=invalid"
+                    }
+                },
+                {
+                    "name": "Sort field không hợp lệ - dự kiến 400",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?sort=-unknown"
+                    }
+                },
+                {
+                    "name": "Cursor sai - dự kiến 400",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/v1/books?strategy=cursor&cursor=abc"
+                    }
+                }
+            ]
+        }
+    ]
+}

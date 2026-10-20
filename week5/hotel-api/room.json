@@ -1,0 +1,66 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Room",
+    "type": "object",
+    "required": [
+        "id",
+        "hotelId",
+        "roomNumber",
+        "roomType",
+        "pricePerNight",
+        "capacity"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^room_[a-z0-9]+$"
+        },
+        "hotelId": {
+            "type": "string",
+            "pattern": "^hotel_[a-z0-9]+$"
+        },
+        "roomNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+        },
+        "roomType": {
+            "type": "string",
+            "enum": [
+                "standard",
+                "deluxe",
+                "suite",
+                "presidential"
+            ]
+        },
+        "pricePerNight": {
+            "type": "object",
+            "required": [
+                "amount",
+                "currency"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "currency": {
+                    "enum": [
+                        "VND",
+                        "USD",
+                        "EUR"
+                    ]
+                }
+            }
+        },
+        "capacity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+        },
+        "isAvailable": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

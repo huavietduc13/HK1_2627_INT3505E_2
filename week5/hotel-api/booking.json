@@ -1,0 +1,70 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Booking",
+    "type": "object",
+    "required": [
+        "id",
+        "userId",
+        "roomId",
+        "checkIn",
+        "checkOut",
+        "status",
+        "totalPrice"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^bk_[0-9]{4}_[a-z0-9]+$"
+        },
+        "userId": {
+            "type": "string",
+            "pattern": "^user_[a-z0-9]+$"
+        },
+        "roomId": {
+            "type": "string",
+            "pattern": "^room_[a-z0-9]+$"
+        },
+        "checkIn": {
+            "type": "string",
+            "format": "date"
+        },
+        "checkOut": {
+            "type": "string",
+            "format": "date"
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "confirmed",
+                "checked_in",
+                "completed",
+                "cancelled"
+            ]
+        },
+        "totalPrice": {
+            "type": "object",
+            "required": [
+                "amount",
+                "currency"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "currency": {
+                    "enum": [
+                        "VND",
+                        "USD",
+                        "EUR"
+                    ]
+                }
+            }
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}
