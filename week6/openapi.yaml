@@ -1,0 +1,154 @@
+openapi: 3.0.3
+info:
+  title: Homework API
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/v1
+tags:
+  - name: Authentication
+  - name: Posts
+
+paths:
+  /auth/login:
+    post:
+      operationId: login
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: nguoidung@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: "Bi'Mat."
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1Ni..."
+                  refresh_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1Ni..."
+                  token_type:
+                    type: string
+                    example: Bearer
+                  expires_in:
+                    type: integer
+                    example: 900
+        '400':
+          description: Lỗi dữ liệu đầu vào không hợp lệ.
+        '401':
+          description: Xác thực thất bại.
+        '429':
+          description: Quá nhiều yêu cầu đăng nhập thất bại.
+
+  /auth/refresh:
+    post:
+      operationId: refreshToken
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1Ni..."
+      responses:
+        '200':
+          description: Cấp Access Token mới thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1Ni..."
+                  token_type:
+                    type: string
+                    example: Bearer
+                  expires_in:
+                    type: integer
+                    example: 900
+        '401':
+          description: Refresh Token hết hạn, không hợp lệ hoặc không có header Authorization.
+        '403':
+          description: Refresh Token đã bị revoked hoặc bị đưa vào blocklist.
+
+  /posts/{id}:
+    get:
+      operationId: getPostByID
+      tags:
+        - Posts
+      security:
+        - jwtToken:
+            - posts:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Lấy thông tin bài viết thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                  content:
+                    type: string
+                  author_id:
+                    type: string
+                  visibility:
+                    type: string
+                    enum: [public, private, friends]
+                  created_at:
+                    type: string
+                    format: date-time
+        '401':
+          description: Chưa đăng nhập hoặc Access Token không hợp lệ.
+        '403':
+          description: Không có quyền truy cập.
+        '404':
+          description: Không tìm thấy bài viết với ID tương ứng.
+
+components:
+  securitySchemes:
+    jwtToken:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: http://localhost:5000/v1/auth/login
+          refreshUrl: http://localhost:5000/v1/auth/refresh
+          scopes:
+            posts:read: Cho phép đọc bài viết
