@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: Product API
+  version: 1.0.0
+paths:
+  /products:
+    get:
+      operationId: products.list_products
+      responses:
+        '200':
+          description: OK
+    post:
+      operationId: products.create_product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sku, name, price_cents]
+              properties:
+                sku:
+                  type: string
+                  minLength: 3
+                name:
+                  type: string
+                price_cents:
+                  type: integer
+                  minimum: 0
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Validation
