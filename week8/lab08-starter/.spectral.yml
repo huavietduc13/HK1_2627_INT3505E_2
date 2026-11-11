@@ -1,0 +1,33 @@
+extends: ["spectral:oas"]
+
+rules:
+  info-contact: off
+  operation-description: off
+  operation-tags: off
+
+  response-200-has-schema:
+    description: "Response 200 must define a valid schema."
+    message: "Endpoint response 200 phải có schema dữ liệu."
+    severity: error
+    given: "$.paths.*.*.responses['200'].content['application/json']"
+    then:
+      field: schema
+      function: defined
+
+  no-204-content:
+    description: "Response 204 No Content must not define body content."
+    message: "HTTP 204 không được phép có nội dung body."
+    severity: error
+    given: "$.paths.*.*.responses['204'].content"
+    then:
+      function: undefined
+
+  book-year-integer:
+    description: "Book.year must be an integer, not string."
+    message: "Book.year trong schema phải có kiểu dữ liệu là integer."
+    severity: error
+    given: "$.components.schemas.Book.properties.year.type"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^integer$"

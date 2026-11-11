@@ -50,3 +50,7 @@ def test_response_extra_field_blocked(client, sample_book):
 
     tampered_data = dict(book_data)
     tampered_data["password_hash"] = "argon2id$v=19$m=65536..."
+    from jsonschema.exceptions import ValidationError
+    with pytest.raises(ValidationError):
+        validate(instance=tampered_data, schema=schema)
+
