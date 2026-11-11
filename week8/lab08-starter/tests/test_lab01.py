@@ -1,16 +1,32 @@
-"""LAB 1 — add your five tests here. Do not delete the smoke tests.
+import pytest
 
-A. GET /books, empty database -> HTTP 200 and []
-B. GET /books/9999 -> HTTP 404, JSON code == NOT_FOUND
-C. POST /books with only author -> HTTP 400, errors contains title
-D. POST valid book, DELETE it, GET same id -> HTTP 404
-BONUS. Validate a Book response using JSON Schema; add an unknown
-       field to a *copy* of the response and assert ValidationError.
 
-Useful imports:
-    from jsonschema import validate, ValidationError
-    import pytest
-    from tools import get_book_schema
+def test_get_books_empty(client):
+    r = client.get("/books")
+    assert r.status_code == 200
+    assert r.content_type == "application/json"
+    data = r.get_json()
+    assert data is not None
+    assert data == []
 
-Do not depend on test execution order. Fixtures: client, app, sample_book.
-"""
+def test_get_book_not_found(client):
+    r = client.get("/books/9999")
+    assert r.status_code == 404
+    data = r.get_json()
+    assert data is not None
+    assert data.get("code") == "NOT_FOUND"
+
+def test_post_book_missing_title(client):
+    r = client.post("/books", json={"author": "Clean Code Author", "year": 2020})
+    assert r.status_code == 400
+    data = r.get_json()
+    assert "errors" in data
+    fields = {e.get("field") for e in data.get("errors", [])}
+    assert "title" in fields
+
+def test_delete_then_get_404(client, sample_book):
+    del_res = client.delete(f"/books/{sample_book}")
+    assert del_res.status_code == 204
+
+    get_res = client.get(f"/books/{sample_book}")
+    assert get_res.status_code == 404
