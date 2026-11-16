@@ -181,6 +181,99 @@
           ]
         }
       ]
+    },
+    {
+      "name": "error-cases",
+      "item": [
+        {
+          "name": "POST /books (missing title) — validation error",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"author\": \"Martin Fowler\", \"year\": 2018}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test(\"Error code is VALIDATION_ERROR\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.code).to.eql(\"VALIDATION_ERROR\");",
+                  "});",
+                  "pm.test(\"Errors list mentions title\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.errors).to.be.an(\"array\");",
+                  "    const fields = json.errors.map(e => e.field);",
+                  "    pm.expect(fields).to.include(\"title\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /books/9999 — not found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books/9999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "books",
+                "9999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", () => {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Error code is NOT_FOUND\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.code).to.eql(\"NOT_FOUND\");",
+                  "    pm.expect(json.message).to.eql(\"Book not found\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
