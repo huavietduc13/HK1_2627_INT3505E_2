@@ -13,3 +13,14 @@ def get(uid):
         "last_name": u["last_name"],
         "email": u["email"]
     }
+
+def create_user(first_name, last_name, email):
+    new_id = max(USERS.keys(), 0) + 1
+    user = {
+        "id": new_id,
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email
+    }
+    USERS[new_id] = user
+    return user

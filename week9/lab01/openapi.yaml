@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: Users API
+  version: 1.0.0
+paths:
+  /api/v1/users/{id}:
+    get:
+      tags:
+        - v1
+      summary: GET info của user (v1)
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thành công
+          headers:
+            Sunset:
+              schema:
+                type: string
+              description: Thời điểm phiên bản ngừng hoạt động hoàn toàn
+            Deprecation:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserV1'
+        '404':
+          description: Không tìm thấy user
+  /api/v2/users/{id}:
+    get:
+      tags:
+        - v2
+      summary: Lấy thông tin user (v2)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserV2'
+        '404':
+          description: Không tìm thấy user
+  /api/v2/users:
+    post:
+      tags:
+        - v2
+      summary: Tạo user mới (v2)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputV2'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserV2'
+        '400':
+          description: Dữ liệu không hợp lệ
+components:
+  schemas:
+    UserV1:
+      type: object
+      required: [id, full_name, email]
+      properties:
+        id:
+          type: integer
+        full_name:
+          type: string
+        email:
+          type: string
+    UserV2:
+      type: object
+      required: [id, first_name, last_name, email]
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+    UserInputV2:
+      type: object
+      required: [first_name, last_name, email]
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string

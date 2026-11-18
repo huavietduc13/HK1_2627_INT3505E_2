@@ -11,3 +11,10 @@ def get(uid):
         "full_name": f"{u['first_name']} {u['last_name']}",
         "email": u["email"]
     }
+
+@bp.after_request
+def add_sunset_headers(response):
+    response.headers["Sunset"] = "Thu, 31 Dec 2026 23:59:59 GMT"
+    response.headers["Deprecation"] = "true"
+    response.headers["Link"] = '</api/v2/users>; rel="successor-version"'
+    return response
